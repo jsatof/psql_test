@@ -1,0 +1,4 @@
+Checks:          '*, -abseil*, -fuchsia*, -android*, -llvm*, -*use-trailing-return-type, -objc*, -zircon*'
+WarningsAsErrors: ''
+HeaderFilterRegex: '.*/src/[^3].*'
+FormatStyle:     'file'

@@ -1,0 +1,32 @@
+image: gcc:11.4
+
+stages:
+  - prep
+  - build
+  - test
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+build:
+  stage: build
+  before_script:
+    - apt-get update
+    - apt-get -y install ccache cmake ninja-build libfmt-dev libgtest-dev
+  script:
+    - mkdir build && cd build
+    - cmake -GNinja -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ..
+    - ninja
+
+test:
+  stage: test 
+  before_script:
+    - apt-get update
+    - apt-get -y install ccache cmake ninja-build libfmt-dev libgtest-dev
+  script:
+    - mkdir build && cd build
+    - cmake -GNinja -DBUILD_TESTS=ON -DCMAKE_CXX_COMPILER_LAUNCHER=ccache ..
+    - ninja test
